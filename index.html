@@ -969,8 +969,10 @@
                 </div>
             </div>
             <div class="responsive-table">
-                <table><thead><tr>${cols.map(c => `<th>${c.replace(/_/g,' ').toUpperCase()}</th>`).join('')}${isAdmin ? '<th>Aksi</th>' : ''}</td></thead>
-                <tbody id="tableBody"></tbody></table>
+                <table>
+                    <thead><tr>${cols.map(c => `<th>${c.replace(/_/g,' ').toUpperCase()}</th>`).join('')}${isAdmin ? '<th>Aksi</th>' : ''}</tr></thead>
+                    <tbody id="tableBody"></tbody>
+                </table>
             </div>
         </div>`;
         document.getElementById("dynamicContent").innerHTML = html;
@@ -1082,6 +1084,7 @@
         pollingInterval = setInterval(() => { if(currentUser) loadAllData(); }, 10000);
     }
     
+    // Set active class default ke dashboard
     document.querySelectorAll(".sidebar-menu li").forEach(li => {
         li.addEventListener("click", () => {
             activeTab = li.getAttribute("data-tab");
@@ -1097,15 +1100,26 @@
         const icon = document.querySelector("#darkModeToggle i");
         const text = document.querySelector("#darkModeToggle");
         if(document.body.classList.contains("dark")) {
-            icon.classList.replace("fa-moon", "fa-sun");
-            text.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            if(icon) icon.classList.replace("fa-moon", "fa-sun");
+            if(text) text.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
         } else {
-            icon.classList.replace("fa-sun", "fa-moon");
-            text.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            if(icon) icon.classList.replace("fa-sun", "fa-moon");
+            if(text) text.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
         }
     });
     
     if(!saved) document.getElementById("loginPage").style.display = "flex";
+    
+    // Inisialisasi sidebar menu default active
+    const defaultMenu = document.querySelector('.sidebar-menu li[data-tab="dashboard"]');
+    if(defaultMenu) defaultMenu.classList.add('active');
+    
+    // Fix: untuk memastikan resize window tidak merusak layout
+    window.addEventListener('resize', () => {
+        if(window.innerWidth > 992) {
+            document.getElementById("sidebar")?.classList.remove("open");
+        }
+    });
 </script>
 </body>
 </html>
