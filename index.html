@@ -15,17 +15,20 @@
             font-family: 'Inter', sans-serif;
         }
 
+        /* ========= WARNA ASLI (COKLAT) ========= */
         :root {
             --bg-gradient: linear-gradient(135deg, #dfc36a 0%, #a46711 100%);
             --bg-page: #5b3b19;
             --card-bg: rgba(247, 248, 214, 0.95);
-            /* Light mode: teks coklat */
             --text-primary: #4A2C0A;
             --text-secondary: #4A2C0A;
             --sidebar-bg: linear-gradient(180deg, #774308 0%, #f1b15d 100%);
             --border-color: rgba(250, 250, 250, 0.909);
             --accent: #eab766;
             --danger: #7c4105;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -4px rgba(0, 0, 0, 0.1);
             --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
             --glow: 0 0 20px rgba(240, 221, 147, 0.445);
         }
@@ -33,7 +36,6 @@
         body.dark {
             --bg-page: #352f14;
             --card-bg: rgba(107, 92, 55, 0.95);
-            /* Dark mode: teks putih */
             --text-primary: #FFFFFF;
             --text-secondary: #FFFFFF;
             --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.6);
@@ -67,7 +69,6 @@
             position: relative;
             display: inline-block;
         }
-        /* Efek kilau bergerak */
         .coklat-text::after {
             content: '';
             position: absolute;
@@ -77,6 +78,7 @@
             height: 100%;
             background: linear-gradient(90deg, transparent, rgba(255,245,200,0.4), transparent);
             animation: shineSlow 4s infinite;
+            pointer-events: none;
         }
         @keyframes shineSlow {
             0% { left: -100%; }
@@ -225,24 +227,40 @@
 
         /* ========= APP CONTAINER ========= */
         .app-container { display: flex; min-height: 100vh; }
+
+        /* SIDEBAR - lebih kecil (260px) dengan warna asli, hover halus */
         .sidebar {
-            width: 280px;
+            width: 260px;
             background: var(--sidebar-bg);
             position: fixed;
             height: 100vh;
             left: 0;
             top: 0;
-            transition: all 0.3s;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             overflow-y: auto;
             box-shadow: var(--shadow-xl);
             z-index: 30;
         }
-        .sidebar-header { padding: 32px 24px; border-bottom: 1px solid rgba(231, 201, 162, 0.139); }
+        .sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+        .sidebar::-webkit-scrollbar-track {
+            background: rgba(0,0,0,0.1);
+        }
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #b97f2e;
+            border-radius: 4px;
+        }
+        .sidebar-header { 
+            padding: 28px 20px; 
+            border-bottom: 1px solid rgba(231, 201, 162, 0.3);
+            margin-bottom: 20px;
+        }
         .sidebar-header h2 {
             display: flex;
             align-items: center;
             gap: 12px;
-            font-size: 1.8rem;
+            font-size: 1.6rem;
             font-weight: 800;
         }
         .sidebar-header h2 i {
@@ -250,18 +268,21 @@
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
+            font-size: 1.8rem;
         }
-        .sidebar-menu { list-style: none; padding: 0 16px; }
-        .sidebar-menu li { margin-bottom: 8px; }
+        .sidebar-menu { list-style: none; padding: 0 12px; }
+        .sidebar-menu li { margin-bottom: 6px; }
         .sidebar-menu a {
             display: flex;
             align-items: center;
             gap: 14px;
-            padding: 12px 20px;
-            border-radius: 16px;
+            padding: 12px 16px;
+            border-radius: 12px;
             color: #feebce;
             text-decoration: none;
-            transition: 0.3s;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            font-size: 0.9rem;
             position: relative;
             overflow: hidden;
         }
@@ -275,18 +296,29 @@
             background: var(--bg-gradient);
             transition: width 0.3s;
             z-index: -1;
-            border-radius: 16px;
+            border-radius: 12px;
         }
         .sidebar-menu a:hover::before,
-        .sidebar-menu .active a::before { width: 100%; }
+        .sidebar-menu .active a::before {
+            width: 100%;
+        }
         .sidebar-menu a:hover,
-        .sidebar-menu .active a { color: white; transform: translateX(5px); }
+        .sidebar-menu .active a {
+            color: white;
+            transform: translateX(4px);
+        }
 
-        .main-content { flex: 1; margin-left: 280px; transition: margin 0.3s; }
+        /* MAIN CONTENT - margin sesuai sidebar baru */
+        .main-content { 
+            flex: 1; 
+            margin-left: 260px; 
+            transition: margin 0.3s ease;
+            min-width: 0;
+        }
         .navbar {
             background: var(--card-bg);
             backdrop-filter: blur(20px);
-            padding: 16px 32px;
+            padding: 14px 32px;
             display: flex;
             justify-content: space-between;
             align-items: center;
@@ -296,6 +328,7 @@
             z-index: 20;
             flex-wrap: wrap;
             gap: 15px;
+            box-shadow: var(--shadow-sm);
         }
         .menu-toggle { display: none; font-size: 1.5rem; cursor: pointer; color: var(--text-primary); }
         .page-title h3 {
@@ -308,7 +341,7 @@
         }
         .dark-toggle {
             background: var(--bg-page);
-            padding: 10px 20px;
+            padding: 8px 18px;
             border-radius: 50px;
             cursor: pointer;
             display: flex;
@@ -316,9 +349,11 @@
             gap: 10px;
             border: 1px solid var(--border-color);
             color: var(--text-primary);
+            font-weight: 500;
+            transition: all 0.2s;
         }
 
-        /* Stats Cards - Hover efek lebih premium */
+        /* Stats Cards - dengan warna asli */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -335,6 +370,7 @@
             position: relative;
             overflow: hidden;
             cursor: pointer;
+            box-shadow: var(--shadow-sm);
         }
         .stat-card:hover {
             transform: translateY(-8px) scale(1.02);
@@ -355,7 +391,7 @@
         }
         .stat-icon { font-size: 3rem; opacity: 0.3; position: absolute; bottom: 20px; right: 20px; }
 
-        /* Tables Premium */
+        /* Tables Premium - rapi dan clean */
         .table-section { padding: 0 32px 32px 32px; }
         .table-wrapper {
             background: var(--card-bg);
@@ -365,6 +401,10 @@
             border: 1px solid var(--border-color);
             margin-bottom: 24px;
             transition: box-shadow 0.2s;
+            box-shadow: var(--shadow-sm);
+        }
+        .table-wrapper:hover {
+            box-shadow: var(--shadow-md);
         }
         .table-header {
             display: flex;
@@ -376,6 +416,8 @@
         }
         .table-header h3 {
             color: var(--text-primary);
+            font-weight: 700;
+            font-size: 1.2rem;
         }
         .btn-add, .btn-edit, .btn-delete {
             background: var(--bg-gradient);
@@ -384,7 +426,15 @@
             padding: 8px 20px;
             border-radius: 50px;
             cursor: pointer;
-            transition: 0.3s;
+            transition: 0.2s;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .btn-add:hover, .btn-edit:hover, .btn-delete:hover {
+            transform: translateY(-1px);
+            filter: brightness(105%);
         }
         .btn-edit { background: #f59e0b; }
         .btn-delete { background: #ef4444; }
@@ -407,11 +457,10 @@
         .responsive-table { overflow-x: auto; -webkit-overflow-scrolling: touch; }
         table { width: 100%; border-collapse: collapse; min-width: 600px; }
         th, td {
-            padding: 14px 12px;
+            padding: 14px 16px;
             text-align: left;
             border-bottom: 1px solid var(--border-color);
             color: var(--text-primary);
-            white-space: nowrap;
         }
         /* Zebra row */
         tbody tr:nth-child(even) {
@@ -435,7 +484,7 @@
             border-bottom: 2px solid #c2821a;
         }
 
-        /* Badge Styles */
+        /* Badge Styles - warna status order sesuai permintaan */
         .badge {
             display: inline-flex;
             align-items: center;
@@ -448,8 +497,13 @@
         }
         .badge-lunas { background: #10b981; color: white; }
         .badge-belum { background: #ef4444; color: white; }
-        .badge-diproses { background: #f59e0b; color: white; }
-        .badge-selesai { background: #10b981; color: white; }
+        /* Status order baru */
+        .badge-proses { background: #f97316; color: white; }      /* orange */
+        .badge-dikirim { background: #3b82f6; color: white; }      /* biru */
+        .badge-selesai { background: #10b981; color: white; }      /* hijau */
+        .badge-batal { background: #ef4444; color: white; }        /* merah */
+        /* Legacy support */
+        .badge-diproses { background: #f97316; color: white; }
         .badge-dibatalkan { background: #ef4444; color: white; }
         .badge-pending { background: #6b7280; color: white; }
 
@@ -474,6 +528,7 @@
             width: 90%;
             max-height: 85vh;
             overflow-y: auto;
+            box-shadow: var(--shadow-xl);
         }
         .modal-header {
             display: flex;
@@ -481,8 +536,8 @@
             align-items: center;
             margin-bottom: 24px;
         }
-        .modal-header h2 { color: var(--text-primary); }
-        .close-modal { font-size: 28px; cursor: pointer; transition: 0.3s; color: var(--text-primary); }
+        .modal-header h2 { color: var(--text-primary); font-weight: 700; }
+        .close-modal { font-size: 28px; cursor: pointer; transition: 0.2s; color: var(--text-primary); }
         .close-modal:hover { transform: rotate(90deg); color: var(--danger); }
         .form-group { margin-bottom: 20px; }
         .form-group label {
@@ -490,6 +545,7 @@
             margin-bottom: 8px;
             font-weight: 600;
             color: var(--text-primary);
+            font-size: 0.85rem;
         }
         .form-group input, .form-group select {
             width: 100%;
@@ -498,6 +554,12 @@
             border: 1px solid var(--border-color);
             background: var(--bg-page);
             color: var(--text-primary);
+            transition: all 0.2s;
+        }
+        .form-group input:focus, .form-group select:focus {
+            outline: none;
+            border-color: #F3BC5C;
+            box-shadow: 0 0 0 3px rgba(245, 176, 66, 0.3);
         }
         .btn-submit {
             background: var(--bg-gradient);
@@ -508,13 +570,17 @@
             font-weight: 700;
             width: 100%;
             cursor: pointer;
+            transition: 0.2s;
+        }
+        .btn-submit:hover {
+            transform: translateY(-1px);
+            filter: brightness(105%);
         }
 
         .loader { text-align: center; padding: 60px; }
         .spinner { width: 50px; height: 50px; border: 3px solid var(--border-color); border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 20px; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Toast Modern */
         .toast {
             position: fixed;
             bottom: 30px;
@@ -527,6 +593,9 @@
             animation: slideInLeft 0.3s ease;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2);
             font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .toast.error {
             background: #ef4444;
@@ -536,10 +605,12 @@
             text-align: center;
             padding: 20px;
             color: var(--text-primary);
+            font-size: 0.8rem;
+            border-top: 1px solid var(--border-color);
+            margin-top: 20px;
         }
 
-        /* ========= RESPONSIVE DESIGN ========= */
-        /* Tablet dan mobile landscape (max-width: 992px) - sidebar toggle */
+        /* ========= RESPONSIVE ========= */
         @media (max-width: 992px) {
             .sidebar {
                 transform: translateX(-100%);
@@ -556,33 +627,18 @@
             .navbar {
                 padding: 12px 20px;
             }
-            .page-title h3 {
-                font-size: 1.3rem;
-            }
             .stats-grid {
                 padding: 20px;
-                gap: 20px;
             }
             .table-section {
                 padding: 0 20px 20px 20px;
             }
         }
-
-        /* Tablet kecil dan mobile besar (max-width: 768px) */
         @media (max-width: 768px) {
             .stats-grid {
                 grid-template-columns: 1fr;
                 gap: 16px;
                 padding: 16px;
-            }
-            .stat-card {
-                padding: 20px;
-            }
-            .stat-number {
-                font-size: 2rem;
-            }
-            .stat-icon {
-                font-size: 2.5rem;
             }
             .table-section {
                 padding: 0 16px 16px 16px;
@@ -594,94 +650,24 @@
                 flex-direction: column;
                 align-items: stretch;
             }
-            .search-box {
-                width: 100%;
-            }
             .search-box input {
                 width: 100%;
             }
-            .table-header button {
-                width: 100%;
-                text-align: center;
-            }
             .navbar {
                 padding: 12px 16px;
-                gap: 12px;
             }
             .page-title h3 {
-                font-size: 1.1rem;
-            }
-            .dark-toggle {
-                padding: 6px 12px;
-                font-size: 0.8rem;
-            }
-            #userRoleBadge {
-                font-size: 0.75rem;
-                padding: 4px 10px;
-            }
-            .btn-add, .btn-edit, .btn-delete {
-                padding: 6px 14px;
-                font-size: 0.8rem;
-            }
-            canvas {
-                max-width: 100%;
-                height: auto !important;
-            }
-            .modal-content {
-                padding: 20px;
-                width: 95%;
-            }
-            .toast {
-                bottom: 20px;
-                right: 20px;
-                left: 20px;
-                width: auto;
-                text-align: center;
-                border-radius: 40px;
-                font-size: 0.85rem;
+                font-size: 1.2rem;
             }
         }
-
-        /* Mobile kecil (max-width: 480px) */
         @media (max-width: 480px) {
-            .stat-card {
-                padding: 16px;
-            }
-            .stat-number {
-                font-size: 1.8rem;
-            }
             th, td {
-                padding: 8px 6px;
-                font-size: 0.7rem;
+                padding: 10px 8px;
+                font-size: 0.75rem;
             }
             .badge {
                 padding: 3px 8px;
                 font-size: 0.6rem;
-                gap: 3px;
-            }
-            .table-header h3 {
-                font-size: 1rem;
-            }
-            .btn-add, .btn-edit, .btn-delete {
-                padding: 5px 10px;
-                font-size: 0.7rem;
-            }
-            .search-box {
-                padding: 5px 12px;
-            }
-            .search-box input {
-                font-size: 0.8rem;
-            }
-            .dark-toggle {
-                padding: 4px 8px;
-                font-size: 0.7rem;
-            }
-            .page-title h3 {
-                font-size: 1rem;
-            }
-            .footer {
-                font-size: 0.7rem;
-                padding: 12px;
             }
         }
     </style>
@@ -736,7 +722,7 @@
                 <div class="menu-toggle" id="menuToggle"><i class="fas fa-bars"></i></div>
                 <div class="page-title"><h3>Premium Dashboard</h3></div>
                 <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                    <span id="userRoleBadge" style="background:var(--accent); padding:6px 15px; border-radius:30px; color: white;"></span>
+                    <span id="userRoleBadge" style="background:var(--accent); padding:6px 15px; border-radius:30px; color: white; font-weight:600;"></span>
                     <button id="logoutBtn" class="btn-add" style="background:#a58258;">Logout</button>
                     <div class="dark-toggle" id="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</div>
                 </div>
@@ -756,8 +742,7 @@
 
 <script>
     // ==================== KONFIGURASI ====================
-    // !!! GANTI DENGAN URL APPS SCRIPT ANDA !!!
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyr3aoN9QUUbq4Gh5m9D8OvbP7h5odMqqBI-5OS-W2_RlGymUhuzTMWLrH6HTIQwsC0/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxHsgniD4zCuG7TtAZCRL2VJYmNAKs4ZrNygWQWHnuEarJ4Nga-FTz9ntMRJioNOMg/exec";
     
     const SHEET_NAMES = {
         reseller: "Reseller",
@@ -781,7 +766,6 @@
     let chartInstance = null;
     let pollingInterval = null;
     
-    // Toast Modern (mengganti alert)
     function showToast(message, isError = false) {
         const toast = document.createElement('div');
         toast.className = 'toast' + (isError ? ' error' : '');
@@ -790,7 +774,6 @@
         setTimeout(() => toast.remove(), 3500);
     }
     
-    // ==================== FUNGSI FORMAT TANGGAL & BADGE ====================
     function formatDate(dateString) {
         if (!dateString) return '-';
         let date;
@@ -813,6 +796,7 @@
         return d.toISOString().split('T')[0];
     }
     
+    // Fungsi badge order dengan warna sesuai permintaan
     function getStatusBadge(status, type) {
         if (type === 'payment') {
             if (status === 'Lunas') return '<span class="badge badge-lunas"><i class="fas fa-check-circle"></i> Lunas</span>';
@@ -820,8 +804,12 @@
         } else if (type === 'order') {
             const s = (status || '').toLowerCase();
             if (s === 'selesai') return '<span class="badge badge-selesai"><i class="fas fa-check-circle"></i> Selesai</span>';
-            if (s === 'diproses') return '<span class="badge badge-diproses"><i class="fas fa-spinner fa-pulse"></i> Diproses</span>';
-            if (s === 'dibatalkan') return '<span class="badge badge-dibatalkan"><i class="fas fa-ban"></i> Dibatalkan</span>';
+            if (s === 'proses') return '<span class="badge badge-proses"><i class="fas fa-spinner fa-pulse"></i> Proses</span>';
+            if (s === 'dikirim') return '<span class="badge badge-dikirim"><i class="fas fa-truck"></i> Dikirim</span>';
+            if (s === 'batal') return '<span class="badge badge-batal"><i class="fas fa-ban"></i> Batal</span>';
+            // legacy mapping
+            if (s === 'diproses') return '<span class="badge badge-proses"><i class="fas fa-spinner"></i> Proses</span>';
+            if (s === 'dibatalkan') return '<span class="badge badge-batal"><i class="fas fa-ban"></i> Batal</span>';
             return '<span class="badge badge-pending">' + status + '</span>';
         }
         return status;
@@ -837,7 +825,7 @@
         document.getElementById("password").value = "user123";
     });
     
-    // ==================== LOGIN (alert diganti toast) ====================
+    // ==================== LOGIN ====================
     document.getElementById("loginForm").addEventListener("submit", async (e) => {
         e.preventDefault();
         const username = document.getElementById("username").value;
@@ -949,7 +937,7 @@
                 if(chartInstance) chartInstance.destroy();
                 chartInstance = new Chart(ctx, {
                     type: 'line',
-                    data: { labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'], datasets: [{ label: 'Order', data: monthly, borderColor: '#667eea', fill: true }] },
+                    data: { labels: ['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'], datasets: [{ label: 'Order', data: monthly, borderColor: '#667eea', fill: true, backgroundColor: 'rgba(102,126,234,0.1)' }] },
                     options: { responsive: true, maintainAspectRatio: true }
                 });
             }
@@ -969,10 +957,8 @@
                 </div>
             </div>
             <div class="responsive-table">
-                <table>
-                    <thead><tr>${cols.map(c => `<th>${c.replace(/_/g,' ').toUpperCase()}</th>`).join('')}${isAdmin ? '<th>Aksi</th>' : ''}</tr></thead>
-                    <tbody id="tableBody"></tbody>
-                </table>
+                <table><thead><tr>${cols.map(c => `<th>${c.replace(/_/g,' ').toUpperCase()}</th>`).join('')}${isAdmin ? '<th>Aksi</th>' : ''}</tr></thead>
+                <tbody id="tableBody"></tbody></table>
             </div>
         </div>`;
         document.getElementById("dynamicContent").innerHTML = html;
@@ -1004,7 +990,7 @@
         if(search) search.addEventListener("input", e => renderFiltered(e.target.value.toLowerCase()));
     }
     
-    // ==================== CRUD dengan dropdown untuk status_bayar ====================
+    // ==================== CRUD dengan dropdown status_order & metode_bayar ====================
     window.openModal = (type, editData = null) => {
         if(currentUser?.role !== "admin") return;
         const modal = document.getElementById("inputModal");
@@ -1018,13 +1004,32 @@
             if((col === "tanggal_order" || col === "tanggal_bayar") && value) {
                 value = toDateInputValue(value);
             }
-            if(col === "status_bayar") {
+            // Dropdown untuk status_order (Order)
+            if(type === "order" && col === "status_order") {
+                html += `<div class="form-group"><label>STATUS ORDER</label>
+                <select name="status_order" required>
+                    <option value="proses" ${value === 'proses' ? 'selected' : ''}>Proses</option>
+                    <option value="dikirim" ${value === 'dikirim' ? 'selected' : ''}>Dikirim</option>
+                    <option value="selesai" ${value === 'selesai' ? 'selected' : ''}>Selesai</option>
+                    <option value="batal" ${value === 'batal' ? 'selected' : ''}>Batal</option>
+                </select></div>`;
+            }
+            // Dropdown untuk metode_bayar (Pembayaran)
+            else if(type === "pembayaran" && col === "metode_bayar") {
+                html += `<div class="form-group"><label>METODE BAYAR</label>
+                <select name="metode_bayar" required>
+                    <option value="transfer" ${value === 'transfer' ? 'selected' : ''}>Transfer</option>
+                    <option value="cash" ${value === 'cash' ? 'selected' : ''}>Cash</option>
+                </select></div>`;
+            }
+            else if(col === "status_bayar") {
                 html += `<div class="form-group"><label>STATUS BAYAR</label>
                 <select name="status_bayar" required>
                     <option value="Lunas" ${value === 'Lunas' ? 'selected' : ''}>Lunas</option>
                     <option value="Tidak Lunas" ${value === 'Tidak Lunas' ? 'selected' : ''}>Tidak Lunas</option>
                 </select></div>`;
-            } else {
+            }
+            else {
                 html += `<div class="form-group"><label>${col.replace(/_/g,' ').toUpperCase()}</label>
                 <input type="${col.includes('tanggal') ? 'date' : 'text'}" name="${col}" value="${value}" required></div>`;
             }
@@ -1084,7 +1089,6 @@
         pollingInterval = setInterval(() => { if(currentUser) loadAllData(); }, 10000);
     }
     
-    // Set active class default ke dashboard
     document.querySelectorAll(".sidebar-menu li").forEach(li => {
         li.addEventListener("click", () => {
             activeTab = li.getAttribute("data-tab");
@@ -1100,26 +1104,15 @@
         const icon = document.querySelector("#darkModeToggle i");
         const text = document.querySelector("#darkModeToggle");
         if(document.body.classList.contains("dark")) {
-            if(icon) icon.classList.replace("fa-moon", "fa-sun");
-            if(text) text.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
+            icon.classList.replace("fa-moon", "fa-sun");
+            text.innerHTML = '<i class="fas fa-sun"></i> Light Mode';
         } else {
-            if(icon) icon.classList.replace("fa-sun", "fa-moon");
-            if(text) text.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
+            icon.classList.replace("fa-sun", "fa-moon");
+            text.innerHTML = '<i class="fas fa-moon"></i> Dark Mode';
         }
     });
     
     if(!saved) document.getElementById("loginPage").style.display = "flex";
-    
-    // Inisialisasi sidebar menu default active
-    const defaultMenu = document.querySelector('.sidebar-menu li[data-tab="dashboard"]');
-    if(defaultMenu) defaultMenu.classList.add('active');
-    
-    // Fix: untuk memastikan resize window tidak merusak layout
-    window.addEventListener('resize', () => {
-        if(window.innerWidth > 992) {
-            document.getElementById("sidebar")?.classList.remove("open");
-        }
-    });
 </script>
 </body>
 </html>
